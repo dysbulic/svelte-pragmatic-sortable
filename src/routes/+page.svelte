@@ -7,7 +7,6 @@
 </script>
 
 <script lang="ts">
-  import clsx from 'clsx'
   import SortableList from '$lib/components/SortableList.svelte'
   import { type DragStateType } from '$lib/components/Row.svelte'
   import row from '$lib/components/Line.svelte'
@@ -93,7 +92,7 @@
       target="_blank"
       class="text-blue-300 hover:text-green-700"
     >
-      Atlasian's Pragmatic Sort
+      Atlassian's Pragmatic Sort
     </a>
     in
     <a
@@ -117,10 +116,10 @@
     <SortableList
       bind:data={tasks}
       bind:history
-      listClasses={clsx(
+      listClasses={[
         'my-4 mx-auto w-[420px] flex flex-col gap-2',
         'border border-solid rounded p-2',
-      )}
+      ]}
       {row}
       rowClasses={(type: DragStateType) => [
         'text-sm bg-white dark:bg-gray-800 dark:text-white/75',

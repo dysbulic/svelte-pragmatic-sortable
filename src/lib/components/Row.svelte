@@ -73,6 +73,7 @@
               y: '0.5rem',
             }),
             render({ container }) {
+              if(Preview == null) return
               status = { type: 'preview', container }
               mount(Preview, {
                 target: container,

@@ -26,7 +26,7 @@
     data: Array<D>
     history?: Array<Array<D>>
     isDatum?: (datum: unknown) => datum is D
-    listClasses?: string
+    listClasses?: string | Array<string>
     row: Component
     rowClasses?: (type: DragStateType) => string | Array<string>
     preview: Component
@@ -86,7 +86,7 @@
   ))
 </script>
 
-<ul class={listClasses}>
+<ul class={[...Array.from(listClasses ?? []), 'sortable-list']}>
   {#each data as datum, idx (datum.id)}
     <Row {row} {rowClasses} {preview} {isDatum} bind:datum={data[idx]}/>
   {/each}

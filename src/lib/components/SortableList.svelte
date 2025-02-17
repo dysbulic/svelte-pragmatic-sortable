@@ -87,7 +87,7 @@
 </script>
 
 <ul class={listClasses}>
-  {#each data as datum (datum.id)}
-    <Row {row} {rowClasses} {preview} {isDatum} {datum}/>
+  {#each data as datum, idx (datum.id)}
+    <Row {row} {rowClasses} {preview} {isDatum} bind:datum={data[idx]}/>
   {/each}
 </ul>

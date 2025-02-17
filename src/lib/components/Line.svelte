@@ -1,13 +1,17 @@
 <script lang="ts">
-  import { GripVertical } from 'lucide-svelte'
+  import GripVertical from 'lucide-svelte/icons/grip-vertical'
   import Pill from './Status.svelte'
   import type { Task } from '../../routes/+page.svelte'
-    import type { Status } from '$lib/types.js';
+  import type { Status } from '$lib/types.js';
 
-  let { datum }: { datum: Task } = $props()
+  let { datum = $bindable(null) }: { datum: Task | null } = $props()
+
+  if(datum == null) throw new Error('`null` `datum`.')
+
   let editing = $state(false)
   let original = datum.content
   let input = $state<HTMLElement | null>(null)
+
 
   $effect(() => {
     if(editing) input?.focus()
@@ -57,7 +61,7 @@
   class="flex items-center justify-center"
 >
   <span class="px-3">
-    <GripVertical size={10}/>
+    <GripVertical/>
   </span>
   {#if editing}
     <form
@@ -69,7 +73,7 @@
         onload={({ target }) => (target as HTMLElement).focus()}
         bind:value={datum.content}
         onkeydown={({ key }) => {
-          if(key === 'Escape') {
+          if(key === 'Escape' && original != null) {
             datum.content = original
             editing = false
           }
@@ -80,7 +84,13 @@
         ]}
       />
       <button class="text-green-500">🗸️</button>
-      <button onclick={() => datum.content = original}>🗑️</button>
+      <button onclick={() => {
+        if(original != null) {
+          datum.content = original
+        }
+      }}>
+        🗑️
+      </button>
     </form>
   {:else}
     <span

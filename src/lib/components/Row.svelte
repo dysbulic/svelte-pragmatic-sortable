@@ -41,18 +41,19 @@
   const idle: DragState = { type: 'idle' }
 
   let {
-    datum, isDatum,
+    datum = $bindable(null), isDatum,
     row: Row, rowClasses,
     preview: Preview,
-    history = $bindable([]),
   }: {
-    datum: R
+    datum: R | null
     isDatum: (datum: unknown) => datum is R
     row: Component<R>
     rowClasses?: (type: DragStateType) => string | Array<string>
     preview: Component<R>
-    history?: Array<Array<R>>
   } = $props()
+
+  if(datum == null) throw new Error('`null` `datum`.')
+
   let element = $state<HTMLDivElement | null>(null)
   let status = $state<DragState>(idle)
 
@@ -96,6 +97,7 @@
           return isDatum(source.data)
         },
         getData({ input }) {
+          if(datum == null) return {} // not quite right
           if(element == null) return datum
           return attachClosestEdge(datum, {
             element,
@@ -131,7 +133,7 @@
     bind:this={element}
     class={rowClasses?.(status.type)}
   >
-    <Row {datum}/>
+    <Row bind:datum/>
   </div>
   {#if status.type === 'is-dragging-over' && status.closestEdge}
     <DropIndicator edge={status.closestEdge} gap={'0.5rem'}/>

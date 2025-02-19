@@ -13,6 +13,7 @@
   import { type Status } from '$lib/types.js'
   import GitHub from '../github.svg?raw'
   import preview from '$lib/components/DragPreview.svelte';
+    import { tick } from 'svelte';
 
   let tasks: Array<Task> = $state(
     [
@@ -136,8 +137,11 @@
           <li class="contents">
             <button
               onclick={() => {
-                const past = history.pop()
-                if(past) tasks = past
+                document.startViewTransition(async () => {
+                  const past = history.pop()
+                  if(past) tasks = past
+                  await tick()
+                })
               }}
               {disabled}
               class={[

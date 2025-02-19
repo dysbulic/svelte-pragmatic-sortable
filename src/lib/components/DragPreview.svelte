@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Task } from '../../routes/+page.svelte';
+  import type { Task } from '../../routes/+page.svelte'
 
   let { datum }: { datum: Task } = $props()
 </script>

@@ -54,14 +54,14 @@
 
   if(datum == null) throw new Error('`null` `datum`.')
 
-  let element = $state<HTMLDivElement | null>(null)
+  let item = $state<HTMLLIElement | null>(null)
   let status = $state<DragState>(idle)
 
   $effect(() => {
-    invariant(element)
+    invariant(item)
     return combine(
       draggable({
-        element,
+        element: item,
         getInitialData() {
           return datum as Record<string, unknown>
         },
@@ -90,18 +90,18 @@
         },
       }),
       dropTargetForElements({
-        element,
+        element: item,
         canDrop({ source }) {
-          if(source.element === element) {
+          if(source.element === item) {
             return false // no drop on self
           }
           return isDatum(source.data)
         },
         getData({ input }) {
           if(datum == null) return {} // not quite right
-          if(element == null) return datum
+          if(item == null) return datum
           return attachClosestEdge(datum, {
-            element,
+            element: item,
             input,
             allowedEdges: ['top', 'bottom'],
           })
@@ -128,15 +128,22 @@
   })
 </script>
 
-<li class="relative">
-  <div
-    data-element-id={datum.id}
-    bind:this={element}
-    class={rowClasses?.(status.type)}
-  >
+<li
+  data-element-id={datum?.id}
+  bind:this={item}
+  class={rowClasses?.(status.type)}
+  style:view-transition-name={`item-${datum?.id}`}
+>
+  <div>
+    <script lang="ts">
+      // @ts-ignore
+    </script>
     <Row bind:datum/>
   </div>
   {#if status.type === 'is-dragging-over' && status.closestEdge}
     <DropIndicator edge={status.closestEdge} gap={'0.5rem'}/>
   {/if}
 </li>
+
+<style>
+</style>
